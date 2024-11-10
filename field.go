@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "fmt"
+	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -58,6 +58,7 @@ func (f *Field) Update() {
 }
 
 func (f *Field) updateBtns() {
+	mouse := rl.GetMousePosition()
 	var x, y, sz, padding float32
 	var r rl.Rectangle
 
@@ -74,7 +75,10 @@ func (f *Field) updateBtns() {
 		r.Y = y + padding / 2
 		r.Width = sz - padding
 		r.Height = sz - padding
-		rl.DrawRectangleRec(r, col)
+		if rl.CheckCollisionPointRec(mouse, r) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+			f.moveCol(i)
+			fmt.Println("col", i)
+		}
 		x += sz
 	}
 	x = f.Bound.X - sz
@@ -84,16 +88,34 @@ func (f *Field) updateBtns() {
 		r.Y = y + padding / 2
 		r.Width = sz - padding
 		r.Height = sz - padding
-		rl.DrawRectangleRec(r, col)
+		if rl.CheckCollisionPointRec(mouse, r) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+			f.moveRow(i)
+			fmt.Println("row", i)
+		}
 		y += sz
 	}
+}
+
+func (f *Field) moveCol(idx int) {
+	fst := f.Content[0][idx]
+	for j := 0; j < f.Size-1; j++ {
+		f.Content[j][idx] = f.Content[j+1][idx]
+	}
+	f.Content[f.Size-1][idx] = fst
+}
+
+func (f *Field) moveRow(idx int) {
+	fst := f.Content[idx][0]
+	for j := 0; j < f.Size-1; j++ {
+		f.Content[idx][j] = f.Content[idx][j+1]
+	}
+	f.Content[idx][f.Size-1] = fst
 }
 
 func (f *Field) Draw() {
 	rl.DrawRectangleRounded(f.Bound, 0.1, 0, f.Col)
 	f.drawContent()
 	f.drawBtns()
-	f.updateBtns()
 }
 
 func (f *Field) drawContent() {
