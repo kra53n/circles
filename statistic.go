@@ -22,8 +22,8 @@ func (s *Statistic) Collect(openNodes, closeNodes []State) {
 	s.maxNodesNum = max(s.maxNodesNum, s.currOpenNodesNum + s.currClosedNodesNum)
 }
 
-func (s *Statistic) Print() {
-	r := "\n\tРезультат поиска в Ширину\n\n"
+func (s *Statistic) Print(name string) {
+	r := fmt.Sprintf("\n\tРезультат поиска в %s\n\n", name)
 	r += fmt.Sprintf("Итераций: %d\n", s.iters)
 	r += "Открытые узлы:\n"
 	r += fmt.Sprintf("\tКоличество при завершении: %d\n", s.currOpenNodesNum)

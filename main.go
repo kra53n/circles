@@ -18,16 +18,23 @@ func main() {
 	baseState := field.Content.GetState()
 	var animation Animation
 
+	processSearch := func(searchMethod func(start, goal State) []State, name string) {
+		rl.SetWindowTitle("Запущен " + name)
+		states := searchMethod(field.Content.GetState(), baseState)
+		animation.Load(states)
+		animation.Play()
+		rl.SetWindowTitle("Завершён " + name)
+	}
+
 	for !rl.WindowShouldClose() {
 
 		field.Update()
 
 		if rl.IsKeyPressed(rl.KeyZero + 1) {
-			rl.SetWindowTitle("Запущен поиск в ширину")
-			states := BreadthFirstSearch(field.Content.GetState(), baseState)
-			animation.Load(states)
-			animation.Play()
-			rl.SetWindowTitle("Завершён поиск в ширину")
+			processSearch(BreadthFirstSearch, "поиск в ширину")
+		}
+		if rl.IsKeyPressed(rl.KeyZero + 2) {
+			processSearch(DepthFirstSearch, "поиск в глубину")
 		}
 
 		if animation.Animate {
