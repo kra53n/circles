@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -15,17 +15,17 @@ const (
 )
 
 type Field struct {
-	Bound rl.Rectangle
-	Col rl.Color
-	Size int
+	Bound   rl.Rectangle
+	Col     rl.Color
+	Size    int
 	Content [][]byte
 }
 
-func NewField() Field{
+func NewField() Field {
 	var size float32 = 400
 	f := Field{
 		Bound: rl.Rectangle{
-			Width: size,
+			Width:  size,
 			Height: size,
 		},
 		Col: rl.Color{
@@ -71,26 +71,24 @@ func (f *Field) updateBtns() {
 	x = f.Bound.X
 	y = f.Bound.Y - sz
 	for i := 0; i < f.Size; i++ {
-		r.X = x + padding / 2
-		r.Y = y + padding / 2
+		r.X = x + padding/2
+		r.Y = y + padding/2
 		r.Width = sz - padding
 		r.Height = sz - padding
 		if rl.CheckCollisionPointRec(mouse, r) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 			f.moveCol(i)
-			fmt.Println("col", i)
 		}
 		x += sz
 	}
 	x = f.Bound.X - sz
 	y = f.Bound.Y
 	for i := 0; i < f.Size; i++ {
-		r.X = x + padding / 2
-		r.Y = y + padding / 2
+		r.X = x + padding/2
+		r.Y = y + padding/2
 		r.Width = sz - padding
 		r.Height = sz - padding
 		if rl.CheckCollisionPointRec(mouse, r) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 			f.moveRow(i)
-			fmt.Println("row", i)
 		}
 		y += sz
 	}
@@ -126,7 +124,7 @@ func (f *Field) drawContent() {
 
 	for i := 0; i < f.Size; i++ {
 		for j := 0; j < f.Size; j++ {
-			rl.DrawCircle(int32(x + sz / 2), int32(y + sz / 2), sz / 2 * 0.9, getColByVal(f.Content[i][j]))
+			rl.DrawCircle(int32(x+sz/2), int32(y+sz/2), sz/2*0.9, getColByVal(f.Content[i][j]))
 			x += sz
 		}
 		x = f.Bound.X
@@ -157,25 +155,25 @@ func (f *Field) drawBtns() {
 func drawArrow(x, y, sz, padding float32, dir Direction, col rl.Color) {
 	var thickness float32 = 4
 	var start, vDir, v1, v2 rl.Vector2
-	switch (dir) {
+	switch dir {
 	case Up:
-		start.X = x + sz / 2
+		start.X = x + sz/2
 		start.Y = y + sz
 		vDir.X = 0
 		vDir.Y = -sz / 2
 	case Down:
-		start.X = x + sz / 2
+		start.X = x + sz/2
 		start.Y = y
 		vDir.X = 0
 		vDir.Y = sz / 2
 	case Left:
 		start.X = x + sz
-		start.Y = y + sz / 2
+		start.Y = y + sz/2
 		vDir.X = -sz / 2
 		vDir.Y = 0
 	case Right:
 		start.X = x
-		start.Y = y + sz / 2
+		start.Y = y + sz/2
 		vDir.X = sz / 2
 		vDir.Y = 0
 	}
@@ -193,7 +191,7 @@ func drawArrow(x, y, sz, padding float32, dir Direction, col rl.Color) {
 }
 
 func getColByVal(col byte) rl.Color {
-	switch (col) {
+	switch col {
 	case 0:
 		return rl.Color{
 			R: 0xFF,
