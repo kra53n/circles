@@ -18,6 +18,14 @@ func (s *State) Unwrap() []State {
 	return states
 }
 
+func UnwrapBidirectionalStates(normal, reverse State) []State {
+	states := normal.Unwrap()
+	for it := &reverse; it != nil; it = it.prv {
+		states = append(states, *it)
+	}
+	return states
+}
+
 func (s *State) GenStates() []State {
 	states := make([]State, 0, len(s.Content)*2)
 	for j := 0; j < 2; j++ {
@@ -35,7 +43,7 @@ func (s *State) GenStates() []State {
 	return states
 }
 
-func (s *State) GenStatesReverse() []State {
+func (s *State) GenReversedStates() []State {
 	states := make([]State, 0, len(s.Content)*2)
 	for j := 0; j < 2; j++ {
 		for i := 0; i < len(s.Content); i++ {

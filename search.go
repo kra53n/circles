@@ -62,8 +62,47 @@ func DepthFirstSearch(start, goal State) []State {
 }
 
 func BidirectionalSearch(start, goal State) []State {
-	return nil
+	var openNodes, closedNodes, openNodesR, closedNodesR, newO []State
+	openNodes = append(openNodes, start.GetCopy())
+	openNodesR = append(openNodes, goal.GetCopy())
+
+	for {
+		newO = nil
+		for _, node := range openNodes {
+			// collection here statistic
+			closedNodes = append(closedNodes, node)
+			for _, n := range node.GenStates() {
+				nodeReversePtr := getStateInStates(n, openNodesR)
+				if nodeReversePtr != nil {
+					return UnwrapBidirectionalStates(n, *nodeReversePtr)
+				}
+				if !stateInStates(n, openNodes) && !stateInStates(n, closedNodes) {
+					n.prv = &node
+					newO = append(openNodes, n)
+				}
+			}
+		}
+		openNodes = newO
+		
+		newO = nil
+		for _, node := range openNodesR {
+			// collection here statistic
+			closedNodesR = append(closedNodesR, node)
+			for _, n := range node.GenReversedStates() {
+				nodePtr := getStateInStates(n, openNodes)
+				if nodePtr != nil {
+					return UnwrapBidirectionalStates(*nodePtr, n)
+				}
+				if !stateInStates(n, openNodesR) && !stateInStates(n, closedNodesR) {
+					n.prv = &node
+					newO = append(openNodes, n)
+				}
+			}
+		}
+		openNodesR = newO
+	}
 }
+
 
 func stateInStates(s State, states []State) bool {
 	for _, v := range states {
@@ -72,4 +111,13 @@ func stateInStates(s State, states []State) bool {
 		}
 	}
 	return false
+}
+
+func getStateInStates(s State, states []State) *State {
+	for _, v := range states {
+		if s.Equals(v) {
+			return &v
+		}
+	}
+	return nil
 }

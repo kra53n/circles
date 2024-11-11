@@ -37,6 +37,7 @@ func main() {
 			processSearch(DepthFirstSearch, "поиск в глубину")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 3) {
+			processSearch(BidirectionalSearch, "двунаправленный поиск")
 		}
 
 		if animation.Animate {
