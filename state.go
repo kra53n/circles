@@ -6,7 +6,7 @@ import (
 
 type State struct {
 	Content Content
-	prv *State
+	prv     *State
 }
 
 func (s *State) Unwrap() []State {

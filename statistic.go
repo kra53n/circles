@@ -5,12 +5,12 @@ import (
 )
 
 type Statistic struct {
-	iters int
-	currOpenNodesNum int
+	iters              int
+	currOpenNodesNum   int
 	currClosedNodesNum int
-	maxOpenNodesNum int
-	maxClosedNodesNum int
-	maxNodesNum int
+	maxOpenNodesNum    int
+	maxClosedNodesNum  int
+	maxNodesNum        int
 }
 
 func (s *Statistic) Collect(openNodes, closeNodes []State) {
@@ -19,7 +19,7 @@ func (s *Statistic) Collect(openNodes, closeNodes []State) {
 	s.currClosedNodesNum = len(closeNodes)
 	s.maxOpenNodesNum = max(s.maxOpenNodesNum, s.currOpenNodesNum)
 	s.maxClosedNodesNum = max(s.maxClosedNodesNum, s.currClosedNodesNum)
-	s.maxNodesNum = max(s.maxNodesNum, s.currOpenNodesNum + s.currClosedNodesNum)
+	s.maxNodesNum = max(s.maxNodesNum, s.currOpenNodesNum+s.currClosedNodesNum)
 }
 
 func (s *Statistic) Print(name string) {

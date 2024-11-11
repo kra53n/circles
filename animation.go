@@ -7,10 +7,10 @@ import (
 const ANIMATION_DELAY float64 = 1
 
 type Animation struct {
-	States []State
-	curr int
+	States     []State
+	curr       int
 	lastUpdate float64
-	Animate bool
+	Animate    bool
 }
 
 func (a *Animation) Load(states []State) {
@@ -25,7 +25,7 @@ func (a *Animation) Play() {
 	}
 	time := rl.GetTime()
 	a.Animate = true
-	if time - a.lastUpdate >= ANIMATION_DELAY {
+	if time-a.lastUpdate >= ANIMATION_DELAY {
 		a.lastUpdate = time
 		a.curr = (a.curr + 1) % len(a.States)
 	}

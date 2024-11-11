@@ -7,7 +7,7 @@ type ISearch interface {
 }
 
 type Search struct {
-	states []State
+	states    []State
 	goalState State
 }
 
@@ -20,20 +20,20 @@ func BreadthFirstSearch(start, goal State) []State {
 	for i := 0; len(openNodes) > 0; i++ {
 		state := openNodes[0]
 		openNodes = openNodes[1:]
-		statistic.Collect(openNodes, closedNodes);
+		statistic.Collect(openNodes, closedNodes)
 		if state.Equals(goal) {
-			statistic.Print("Ширину");
-			return state.Unwrap();
+			statistic.Print("Ширину")
+			return state.Unwrap()
 		}
 		closedNodes = append(closedNodes, state)
 		for _, s := range state.GenStates() {
 			if !stateInStates(s, openNodes) && !stateInStates(s, closedNodes) {
-				s.prv = &state;
+				s.prv = &state
 				openNodes = append(openNodes, s)
 			}
 		}
 	}
-	return nil;
+	return nil
 }
 
 func DepthFirstSearch(start, goal State) []State {
@@ -45,20 +45,20 @@ func DepthFirstSearch(start, goal State) []State {
 	for i := 0; len(openNodes) > 0; i++ {
 		state := openNodes[len(openNodes)-1]
 		openNodes = openNodes[:len(openNodes)-1]
-		statistic.Collect(openNodes, closedNodes);
+		statistic.Collect(openNodes, closedNodes)
 		if state.Equals(goal) {
-			statistic.Print("Глубину");
-			return state.Unwrap();
+			statistic.Print("Глубину")
+			return state.Unwrap()
 		}
 		closedNodes = append(closedNodes, state)
 		for _, s := range state.GenStates() {
 			if !stateInStates(s, openNodes) && !stateInStates(s, closedNodes) {
-				s.prv = &state;
+				s.prv = &state
 				openNodes = append(openNodes, s)
 			}
 		}
 	}
-	return nil;
+	return nil
 }
 
 func stateInStates(s State, states []State) bool {
