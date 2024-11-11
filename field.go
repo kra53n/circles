@@ -14,11 +14,13 @@ const (
 	Right
 )
 
+type Content [][]byte
+
 type Field struct {
 	Bound   rl.Rectangle
 	Col     rl.Color
 	Size    int
-	Content [][]byte
+	Content Content
 }
 
 func NewField() Field {
@@ -76,7 +78,7 @@ func (f *Field) updateBtns() {
 		r.Width = sz - padding
 		r.Height = sz - padding
 		if rl.CheckCollisionPointRec(mouse, r) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-			f.moveCol(i)
+			f.Content.moveCol(i, f.Size)
 		}
 		x += sz
 	}
@@ -88,26 +90,26 @@ func (f *Field) updateBtns() {
 		r.Width = sz - padding
 		r.Height = sz - padding
 		if rl.CheckCollisionPointRec(mouse, r) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-			f.moveRow(i)
+			f.Content.moveRow(i, f.Size)
 		}
 		y += sz
 	}
 }
 
-func (f *Field) moveCol(idx int) {
-	fst := f.Content[0][idx]
-	for j := 0; j < f.Size-1; j++ {
-		f.Content[j][idx] = f.Content[j+1][idx]
+func (c Content) moveCol(idx, size int) {
+	fst := c[0][idx]
+	for i := 0; i < size-1; i++ {
+		c[i][idx] = c[i+1][idx]
 	}
-	f.Content[f.Size-1][idx] = fst
+	c[size-1][idx] = fst
 }
 
-func (f *Field) moveRow(idx int) {
-	fst := f.Content[idx][0]
-	for j := 0; j < f.Size-1; j++ {
-		f.Content[idx][j] = f.Content[idx][j+1]
+func (c Content) moveRow(idx, size int) {
+	fst := c[idx][0]
+	for i := 0; i < size-1; i++ {
+		c[idx][i] = c[idx][i+1]
 	}
-	f.Content[idx][f.Size-1] = fst
+	c[idx][size-1] = fst
 }
 
 func (f *Field) Draw() {

@@ -15,6 +15,9 @@ func main() {
 	rl.SetTargetFPS(60)
 
 	field := NewField()
+	var baseState State
+	baseState.Content = field.Content
+	baseState.genStates(field.Size)
 
 	for !rl.WindowShouldClose() {
 
