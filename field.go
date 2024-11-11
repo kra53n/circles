@@ -78,7 +78,7 @@ func (f *Field) updateBtns() {
 		r.Width = sz - padding
 		r.Height = sz - padding
 		if rl.CheckCollisionPointRec(mouse, r) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-			f.Content.moveCol(i, f.Size)
+			f.Content.moveCol(i)
 		}
 		x += sz
 	}
@@ -90,26 +90,26 @@ func (f *Field) updateBtns() {
 		r.Width = sz - padding
 		r.Height = sz - padding
 		if rl.CheckCollisionPointRec(mouse, r) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-			f.Content.moveRow(i, f.Size)
+			f.Content.moveRow(i)
 		}
 		y += sz
 	}
 }
 
-func (c Content) moveCol(idx, size int) {
+func (c Content) moveCol(idx int) {
 	fst := c[0][idx]
-	for i := 0; i < size-1; i++ {
+	for i := 0; i < len(c)-1; i++ {
 		c[i][idx] = c[i+1][idx]
 	}
-	c[size-1][idx] = fst
+	c[len(c)-1][idx] = fst
 }
 
-func (c Content) moveRow(idx, size int) {
+func (c Content) moveRow(idx int) {
 	fst := c[idx][0]
-	for i := 0; i < size-1; i++ {
+	for i := 0; i < len(c)-1; i++ {
 		c[idx][i] = c[idx][i+1]
 	}
-	c[idx][size-1] = fst
+	c[idx][len(c)-1] = fst
 }
 
 func (f *Field) Draw() {

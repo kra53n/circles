@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "fmt"
+	// "fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -15,13 +15,44 @@ func main() {
 	rl.SetTargetFPS(60)
 
 	field := NewField()
-	var baseState State
-	baseState.Content = field.Content
-	baseState.genStates(field.Size)
+	baseState := field.Content.GetState()
+	var animation Animation
 
 	for !rl.WindowShouldClose() {
 
 		field.Update()
+
+		if rl.IsKeyPressed(rl.KeyZero + 1) {
+			rl.SetWindowTitle("Запущен поиск в ширину")
+			states := BreadthFirstSearch(field.Content.GetState(), baseState)
+			animation.Load(states)
+			animation.Play()
+			rl.SetWindowTitle("Завершён поиск в ширину")
+		}
+
+		if animation.Animate {
+			animation.Play()
+			s := animation.GetCurrState()
+			field.Content = s.Content
+			if s.Equals(baseState) {
+				animation.Stop()
+			}
+		}
+
+		if rl.IsKeyPressed(rl.KeySpace) {
+			if animation.Animate {
+				animation.Stop()
+			} else {
+				animation.Play()
+			}
+		}
+
+		if rl.IsKeyPressed(rl.KeyR) && animation.States[0].Content != nil {
+			field.Content = animation.States[0].Content
+			animation.Play()
+			animation.Stop()
+		}
+
 		rl.BeginDrawing()
 		{
 			rl.ClearBackground(rl.Blue)

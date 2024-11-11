@@ -1,30 +1,41 @@
 package main
 
-// import "fmt"
+import (
+	"slices"
+)
 
 type State struct {
 	Content Content
+	prv *State
 }
 
-func (s *State) genStates(size int) []State {
-	states := make([]State, 0, size*2)
+func (s *State) Unwrap() []State {
+	var states []State
+	for it := s; it != nil; it = it.prv {
+		states = append(states, *it)
+	}
+	slices.Reverse(states)
+	return states
+}
+
+func (s *State) GenStates() []State {
+	states := make([]State, 0, len(s.Content)*2)
 	for j := 0; j < 2; j++ {
 		for i := 0; i < len(s.Content); i++ {
-			state := s.getCopy()
+			state := s.GetCopy()
 			switch j {
 			case 0:
-				state.Content.moveCol(i, size)
+				state.Content.moveCol(i)
 			case 1:
-				state.Content.moveRow(i, size)
+				state.Content.moveRow(i)
 			}
 			states = append(states, state)
-			// fmt.Println(s.equals(state))
 		}
 	}
 	return states
 }
 
-func (s1 *State) getCopy() State {
+func (s1 *State) GetCopy() State {
 	var s2 State
 	s2.Content = make([][]byte, len(s1.Content))
 	for i, row := range s1.Content {
@@ -36,7 +47,7 @@ func (s1 *State) getCopy() State {
 	return s2
 }
 
-func (s1 *State) equals(s2 State) bool {
+func (s1 *State) Equals(s2 State) bool {
 	for i, _ := range s1.Content {
 		for j, _ := range s2.Content {
 			if s1.Content[i][j] != s2.Content[i][j] {
@@ -45,4 +56,10 @@ func (s1 *State) equals(s2 State) bool {
 		}
 	}
 	return true
+}
+
+func (c Content) GetState() State {
+	var s State
+	s.Content = c
+	return s.GetCopy()
 }
