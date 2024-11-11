@@ -112,6 +112,22 @@ func (c Content) moveRow(idx int) {
 	c[idx][len(c)-1] = fst
 }
 
+func (c Content) moveColReverse(idx int) {
+	lst := c[len(c)-1][idx]
+	for i := len(c)-1; i > 0; i-- {
+		c[i][idx] = c[i-1][idx]
+	}
+	c[0][idx] = lst
+}
+
+func (c Content) moveRowReverse(idx int) {
+	lst := c[idx][len(c)-1]
+	for i := len(c)-1; i > 0; i-- {
+		c[idx][i] = c[idx][i-1]
+	}
+	c[idx][0] = lst
+}
+
 func (f *Field) Draw() {
 	rl.DrawRectangleRounded(f.Bound, 0.1, 0, f.Col)
 	f.drawContent()

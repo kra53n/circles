@@ -36,6 +36,8 @@ func main() {
 		if rl.IsKeyPressed(rl.KeyZero + 2) {
 			processSearch(DepthFirstSearch, "поиск в глубину")
 		}
+		if rl.IsKeyPressed(rl.KeyZero + 3) {
+		}
 
 		if animation.Animate {
 			animation.Play()

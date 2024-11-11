@@ -35,6 +35,23 @@ func (s *State) GenStates() []State {
 	return states
 }
 
+func (s *State) GenStatesReverse() []State {
+	states := make([]State, 0, len(s.Content)*2)
+	for j := 0; j < 2; j++ {
+		for i := 0; i < len(s.Content); i++ {
+			state := s.GetCopy()
+			switch j {
+			case 0:
+				state.Content.moveColReverse(i)
+			case 1:
+				state.Content.moveRowReverse(i)
+			}
+			states = append(states, state)
+		}
+	}
+	return states
+}
+
 func (s1 *State) GetCopy() State {
 	var s2 State
 	s2.Content = make([][]byte, len(s1.Content))
