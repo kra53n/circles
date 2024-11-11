@@ -18,6 +18,7 @@ func (s *State) genStates(size int) []State {
 				state.Content.moveRow(i, size)
 			}
 			states = append(states, state)
+			// fmt.Println(s.equals(state))
 		}
 	}
 	return states
@@ -35,6 +36,13 @@ func (s1 *State) getCopy() State {
 	return s2
 }
 
-func (s1 *State) equals(s2 *State) bool {
-	return false
+func (s1 *State) equals(s2 State) bool {
+	for i, _ := range s1.Content {
+		for j, _ := range s2.Content {
+			if s1.Content[i][j] != s2.Content[i][j] {
+				return false
+			}
+		}
+	}
+	return true
 }
