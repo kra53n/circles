@@ -112,8 +112,9 @@ type PQItemSlice []*PQItem
 func AStarSearch(start, goal State, h func(s State) int) []State {
 	var openNodes PriorityQueue
 	var closedNodes PQItemSlice
-	// add start to openNodes
 	
+	heap.Push(&openNodes, &PQItem{val: start, g: 0, f: h(start)})
+
 	for openNodes.Len() > 0 {
 		curr := heap.Pop(&openNodes).(*PQItem)
 		if curr.val.Equals(goal) {
@@ -149,7 +150,7 @@ func AStarSearch(start, goal State, h func(s State) int) []State {
 			n.g = curr.g + 1
 			n.f = h(n.val) + n.g
 			n.val.prv = &curr.val
-			heap.Push(&openNodes, n)
+			heap.Push(&openNodes, &n)
 		}
 	}
 	return nil
@@ -171,7 +172,6 @@ func (items *PQItemSlice) Remove(item PQItem) {
 			return
 		}
 	}
-	return
 }
 
 func FirstHeuristic(s State) int {
