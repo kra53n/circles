@@ -1,7 +1,6 @@
 package main
 
 // import "fmt"
-import "container/heap"
 
 type ISearch interface {
 	Search()
@@ -76,7 +75,7 @@ func BidirectionalSearch(start, goal State) []State {
 				nodeReversePtr := getStateInStates(n, openNodesR)
 				if nodeReversePtr != nil {
 					states := UnwrapBidirectionalStates(n, *nodeReversePtr)
-					statistic.Print(len(states))
+					// statistic.Print(len(states))
 					return states
 				}
 				if !stateInStates(n, openNodes) && !stateInStates(n, closedNodes) {
@@ -95,7 +94,7 @@ func BidirectionalSearch(start, goal State) []State {
 				nodePtr := getStateInStates(n, openNodes)
 				if nodePtr != nil {
 					states := UnwrapBidirectionalStates(*nodePtr, n)
-					statistic.Print(len(states))
+					// statistic.Print(len(states))
 					return states
 				}
 				if !stateInStates(n, openNodesR) && !stateInStates(n, closedNodesR) {
@@ -111,10 +110,11 @@ type PQItem struct {
 	val    State
 	f int
 	g int
+}
 
 func AStarSearch(start, goal State, h func(s State) int) []State {
-	var openNodes []PQItem
-	var closedNodes []PQItem
+	// var openNodes []PQItem
+	// var closedNodes []PQItem
 	
 	// heap.Push(&openNodes, &PQItem{val: start, g: 0, f: h(start)})
 

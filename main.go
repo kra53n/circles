@@ -2,6 +2,7 @@ package main
 
 import (
 	// "fmt"
+	"os"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -9,6 +10,11 @@ const WDT = 1000
 const HGT = 720
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "subtask" {
+		GenerateSubtasks()
+		return
+	}
+
 	rl.SetTraceLogLevel(rl.LogNone)
 	rl.SetTargetFPS(60)
 	rl.InitWindow(WDT, HGT, "circle")
