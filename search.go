@@ -107,9 +107,11 @@ func BidirectionalSearch(start, goal State) []State {
 	}
 }
 
+type PQItemSlice []*PQItem
+
 func AStarSearch(start, goal State, h func(s State) int) []State {
 	var openNodes PriorityQueue
-	var closedNodes []*PQItem
+	var closedNodes PQItemSlice
 	// add start to openNodes
 	
 	for openNodes.Len() > 0 {
@@ -121,36 +123,55 @@ func AStarSearch(start, goal State, h func(s State) int) []State {
 		}
 		// statistic.Collect(openNodes, closedNodes);
 		closedNodes = append(closedNodes, curr)
-		for _, n := range curr.val.GenStates() {
+		for _, n := range curr.GenStates() {
 			item := openNodes.GetItem(n)
 			if item != nil {
-				score := h(n) + curr.g + 1
+				score := h(n.val) + curr.g + 1
 				if score < item.f {
 					item.f = score
 					item.g = curr.g + 1
-					item.val.prv = curr.val
+					item.val.prv = &curr.val
 				}
 				continue
 			}
 			item = closedNodes.GetItem(n)
 			if item != nil {
-				score := h(n) + curr.g + 1
+				score := h(n.val) + curr.g + 1
 				if score < item.f {
-					closedNodes.Remove(item)
+					closedNodes.Remove(*item)
 					item.f = score
 					item.g = curr.g + 1
-					item.val.prv = curr.val
+					item.val.prv = &curr.val
 					heap.Push(&openNodes, item)
 				}
 				continue
 			}
-			item.g = curr.g + 1
-			item.f = h(state) + state.g
-			item.val.prv = curr.val
-			heap.Push(&openNodes, item)
+			n.g = curr.g + 1
+			n.f = h(n.val) + n.g
+			n.val.prv = &curr.val
+			heap.Push(&openNodes, n)
 		}
 	}
 	return nil
+}
+
+func (items PQItemSlice) GetItem(item PQItem) *PQItem {
+	for _, i := range items {
+		if item.val.Equals(i.val) {
+			return i
+		}
+	}
+	return nil
+}
+
+func (items *PQItemSlice) Remove(item PQItem) {
+	for i, v := range *items {
+		if item.val.Equals(v.val) {
+			*items = append((*items)[:i], (*items)[i+1:]...)
+			return
+		}
+	}
+	return
 }
 
 func FirstHeuristic(s State) int {

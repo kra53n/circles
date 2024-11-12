@@ -1,13 +1,20 @@
 // priority queue implementation for AStartSearch based on "container/heap"
 package main
 
-import "container/heap"
-
 type PQItem struct {
 	val    State
 	f int
 	g int
 	idx int
+}
+
+func (item *PQItem) GenStates() []PQItem {
+	states := item.val.GenStates()
+	items := make([]PQItem, 0, len(states))
+	for _, s := range states {
+		items = append(items, PQItem{val: s, f: item.f, g: item.g, idx: item.idx})
+	}
+	return items
 }
 
 type PriorityQueue []*PQItem
@@ -41,8 +48,11 @@ func (pq *PriorityQueue) Pop() any {
 	return item
 }
 
-func (pq *PriorityQueue) update(item *PQItem, val State, f int) {
-	item.val = val
-	item.f = f
-	heap.Fix(pq, item.idx)
+func (pq *PriorityQueue) GetItem(item PQItem) *PQItem {
+	for _, i := range *pq {
+		if item.val.Equals(i.val) {
+			return i
+		}
+	}
+	return nil
 }
