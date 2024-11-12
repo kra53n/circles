@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"slices"
 )
 
@@ -11,6 +12,7 @@ type State struct {
 
 func (s *State) Unwrap() []State {
 	var states []State
+	fmt.Println(s)
 	for it := s; it != nil; it = it.prv {
 		states = append(states, *it)
 	}
@@ -20,7 +22,8 @@ func (s *State) Unwrap() []State {
 
 func UnwrapBidirectionalStates(normal, reverse State) []State {
 	states := normal.Unwrap()
-	for it := &reverse; it != nil; it = it.prv {
+	for it := reverse.prv; it != nil; it = it.prv {
+		fmt.Println(it)
 		states = append(states, *it)
 	}
 	return states
@@ -37,6 +40,7 @@ func (s *State) GenStates() []State {
 			case 1:
 				state.Content.moveRow(i)
 			}
+			state.prv = s
 			states = append(states, state)
 		}
 	}
@@ -54,6 +58,7 @@ func (s *State) GenReversedStates() []State {
 			case 1:
 				state.Content.moveRowReverse(i)
 			}
+			state.prv = s
 			states = append(states, state)
 		}
 	}

@@ -4,7 +4,7 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-const ANIMATION_DELAY float64 = 1
+const ANIMATION_DELAY float64 = 0.5
 
 type Animation struct {
 	States     []State
