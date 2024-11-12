@@ -107,72 +107,75 @@ func BidirectionalSearch(start, goal State) []State {
 	}
 }
 
-type PQItemSlice []*PQItem
+type PQItem struct {
+	val    State
+	f int
+	g int
 
 func AStarSearch(start, goal State, h func(s State) int) []State {
-	var openNodes PriorityQueue
-	var closedNodes PQItemSlice
+	var openNodes []PQItem
+	var closedNodes []PQItem
 	
-	heap.Push(&openNodes, &PQItem{val: start, g: 0, f: h(start)})
+	// heap.Push(&openNodes, &PQItem{val: start, g: 0, f: h(start)})
 
-	for openNodes.Len() > 0 {
-		curr := heap.Pop(&openNodes).(*PQItem)
-		if curr.val.Equals(goal) {
-			// statistic.pathLenght = curr.g;
-			// statistic.Print();
-			return curr.val.Unwrap();
-		}
-		// statistic.Collect(openNodes, closedNodes);
-		closedNodes = append(closedNodes, curr)
-		for _, n := range curr.GenStates() {
-			item := openNodes.GetItem(n)
-			if item != nil {
-				score := h(n.val) + curr.g + 1
-				if score < item.f {
-					item.f = score
-					item.g = curr.g + 1
-					item.val.prv = &curr.val
-				}
-				continue
-			}
-			item = closedNodes.GetItem(n)
-			if item != nil {
-				score := h(n.val) + curr.g + 1
-				if score < item.f {
-					closedNodes.Remove(*item)
-					item.f = score
-					item.g = curr.g + 1
-					item.val.prv = &curr.val
-					heap.Push(&openNodes, item)
-				}
-				continue
-			}
-			n.g = curr.g + 1
-			n.f = h(n.val) + n.g
-			n.val.prv = &curr.val
-			heap.Push(&openNodes, &n)
-		}
-	}
+	// for openNodes.Len() > 0 {
+	// 	curr := heap.Pop(&openNodes).(*PQItem)
+	// 	if curr.val.Equals(goal) {
+	// 		// statistic.pathLenght = curr.g;
+	// 		// statistic.Print();
+	// 		return curr.val.Unwrap();
+	// 	}
+	// 	// statistic.Collect(openNodes, closedNodes);
+	// 	closedNodes = append(closedNodes, curr)
+	// 	for _, n := range curr.GenStates() {
+	// 		item := openNodes.GetItem(n)
+	// 		if item != nil {
+	// 			score := h(n.val) + curr.g + 1
+	// 			if score < item.f {
+	// 				item.f = score
+	// 				item.g = curr.g + 1
+	// 				item.val.prv = &curr.val
+	// 			}
+	// 			continue
+	// 		}
+	// 		item = closedNodes.GetItem(n)
+	// 		if item != nil {
+	// 			score := h(n.val) + curr.g + 1
+	// 			if score < item.f {
+	// 				closedNodes.Remove(*item)
+	// 				item.f = score
+	// 				item.g = curr.g + 1
+	// 				item.val.prv = &curr.val
+	// 				heap.Push(&openNodes, item)
+	// 			}
+	// 			continue
+	// 		}
+	// 		n.g = curr.g + 1
+	// 		n.f = h(n.val) + n.g
+	// 		n.val.prv = &curr.val
+	// 		heap.Push(&openNodes, &n)
+	// 	}
+	// }
 	return nil
 }
 
-func (items PQItemSlice) GetItem(item PQItem) *PQItem {
-	for _, i := range items {
-		if item.val.Equals(i.val) {
-			return i
-		}
-	}
-	return nil
-}
+// func (items PQItemSlice) GetItem(item PQItem) *PQItem {
+// 	for _, i := range items {
+// 		if item.val.Equals(i.val) {
+// 			return i
+// 		}
+// 	}
+// 	return nil
+// }
 
-func (items *PQItemSlice) Remove(item PQItem) {
-	for i, v := range *items {
-		if item.val.Equals(v.val) {
-			*items = append((*items)[:i], (*items)[i+1:]...)
-			return
-		}
-	}
-}
+// func (items *PQItemSlice) Remove(item PQItem) {
+// 	for i, v := range *items {
+// 		if item.val.Equals(v.val) {
+// 			*items = append((*items)[:i], (*items)[i+1:]...)
+// 			return
+// 		}
+// 	}
+// }
 
 func FirstHeuristic(s State) int {
 	return 1
