@@ -106,6 +106,10 @@ func BidirectionalSearch(start, goal State) []State {
 	}
 }
 
+func AStarSearch(start, goal State) []State {
+	return nil
+}
+
 func stateInStates(s State, states []State) bool {
 	for _, v := range states {
 		if s.Equals(v) {

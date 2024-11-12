@@ -5,14 +5,15 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-const WDT = 1280
+const WDT = 1000
 const HGT = 720
 
 func main() {
+	rl.SetTraceLogLevel(rl.LogNone)
+	rl.SetTargetFPS(60)
 	rl.InitWindow(WDT, HGT, "circle")
 	defer rl.CloseWindow()
 
-	rl.SetTargetFPS(60)
 
 	field := NewField()
 	baseState := field.Content.GetState()
