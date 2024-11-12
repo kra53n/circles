@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	"slices"
 )
 
@@ -12,7 +12,6 @@ type State struct {
 
 func (s *State) Unwrap() []State {
 	var states []State
-	fmt.Println(s)
 	for it := s; it != nil; it = it.prv {
 		states = append(states, *it)
 	}
@@ -23,7 +22,6 @@ func (s *State) Unwrap() []State {
 func UnwrapBidirectionalStates(normal, reverse State) []State {
 	states := normal.Unwrap()
 	for it := reverse.prv; it != nil; it = it.prv {
-		fmt.Println(it)
 		states = append(states, *it)
 	}
 	return states

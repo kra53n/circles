@@ -28,7 +28,6 @@ func BreadthFirstSearch(start, goal State) []State {
 		closedNodes = append(closedNodes, state)
 		for _, s := range state.GenStates() {
 			if !stateInStates(s, openNodes) && !stateInStates(s, closedNodes) {
-				s.prv = &state
 				openNodes = append(openNodes, s)
 			}
 		}
@@ -53,7 +52,6 @@ func DepthFirstSearch(start, goal State) []State {
 		closedNodes = append(closedNodes, state)
 		for _, s := range state.GenStates() {
 			if !stateInStates(s, openNodes) && !stateInStates(s, closedNodes) {
-				s.prv = &state
 				openNodes = append(openNodes, s)
 			}
 		}
@@ -62,6 +60,8 @@ func DepthFirstSearch(start, goal State) []State {
 }
 
 func BidirectionalSearch(start, goal State) []State {
+	var statistic BidirectionalStatistic
+
 	var openNodes, closedNodes, openNodesR, closedNodesR, newO []State
 	openNodes = append(openNodes, start.GetCopy())
 	openNodesR = append(openNodesR, goal.GetCopy())
@@ -69,12 +69,14 @@ func BidirectionalSearch(start, goal State) []State {
 	for {
 		newO = nil
 		for _, node := range openNodes {
-			// collection here statistic
+			statistic.Collect(openNodes, closedNodes)
 			closedNodes = append(closedNodes, node)
 			for _, n := range node.GenStates() {
 				nodeReversePtr := getStateInStates(n, openNodesR)
 				if nodeReversePtr != nil {
-					return UnwrapBidirectionalStates(n, *nodeReversePtr)
+					states := UnwrapBidirectionalStates(n, *nodeReversePtr)
+					statistic.Print(len(states))
+					return states
 				}
 				if !stateInStates(n, openNodes) && !stateInStates(n, closedNodes) {
 					
@@ -86,12 +88,14 @@ func BidirectionalSearch(start, goal State) []State {
 		
 		newO = nil
 		for _, node := range openNodesR {
-			// collection here statistic
+			statistic.Collect(openNodesR, closedNodesR)
 			closedNodesR = append(closedNodesR, node)
 			for _, n := range node.GenReversedStates() {
 				nodePtr := getStateInStates(n, openNodes)
 				if nodePtr != nil {
-					return UnwrapBidirectionalStates(*nodePtr, n)
+					states := UnwrapBidirectionalStates(*nodePtr, n)
+					statistic.Print(len(states))
+					return states
 				}
 				if !stateInStates(n, openNodesR) && !stateInStates(n, closedNodesR) {
 					newO = append(newO, n)
