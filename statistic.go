@@ -36,16 +36,16 @@ func (s *Statistic) Print(name string) {
 }
 
 type BidirectionalStatistic struct {
-	iters              int
-	currOpenNodesNum   int
-	currClosedNodesNum int
-	maxOpenNodesNum    int
-	maxClosedNodesNum  int
-	maxNodesNum        int
-	currOpenNodesNumR int 
-	maxOpenNodesNumR int 
-	currClosedNodesNumR int 
-	maxClosedNodesNumR int 
+	iters               int
+	currOpenNodesNum    int
+	currClosedNodesNum  int
+	maxOpenNodesNum     int
+	maxClosedNodesNum   int
+	maxNodesNum         int
+	currOpenNodesNumR   int
+	maxOpenNodesNumR    int
+	currClosedNodesNumR int
+	maxClosedNodesNumR  int
 }
 
 func (s *BidirectionalStatistic) Collect(openNodes, closeNodes []State) {

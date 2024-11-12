@@ -79,13 +79,13 @@ func BidirectionalSearch(start, goal State) []State {
 					return states
 				}
 				if !stateInStates(n, openNodes) && !stateInStates(n, closedNodes) {
-					
+
 					newO = append(newO, n)
 				}
 			}
 		}
 		openNodes = newO
-		
+
 		newO = nil
 		for _, node := range openNodesR {
 			statistic.Collect(openNodesR, closedNodesR)
@@ -107,15 +107,15 @@ func BidirectionalSearch(start, goal State) []State {
 }
 
 type PQItem struct {
-	val    State
-	f int
-	g int
+	val State
+	f   int
+	g   int
 }
 
 func AStarSearch(start, goal State, h func(s State) int) []State {
 	// var openNodes []PQItem
 	// var closedNodes []PQItem
-	
+
 	// heap.Push(&openNodes, &PQItem{val: start, g: 0, f: h(start)})
 
 	// for openNodes.Len() > 0 {

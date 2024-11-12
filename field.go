@@ -114,7 +114,7 @@ func (c Content) moveRow(idx int) {
 
 func (c Content) moveColReverse(idx int) {
 	lst := c[len(c)-1][idx]
-	for i := len(c)-1; i > 0; i-- {
+	for i := len(c) - 1; i > 0; i-- {
 		c[i][idx] = c[i-1][idx]
 	}
 	c[0][idx] = lst
@@ -122,7 +122,7 @@ func (c Content) moveColReverse(idx int) {
 
 func (c Content) moveRowReverse(idx int) {
 	lst := c[idx][len(c)-1]
-	for i := len(c)-1; i > 0; i-- {
+	for i := len(c) - 1; i > 0; i-- {
 		c[idx][i] = c[idx][i-1]
 	}
 	c[idx][0] = lst

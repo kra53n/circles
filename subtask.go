@@ -4,7 +4,7 @@ import "fmt"
 
 type Subtask struct {
 	opt []int
-	v int
+	v   int
 }
 
 func GenerateSubtasks() []Subtask {
@@ -23,7 +23,7 @@ func GenerateSubtasks() []Subtask {
 		if !start.Equals(goal) {
 			states = BidirectionalSearch(start, goal)
 		}
-		subtasks = append(subtasks, Subtask{opt: opt, v: len(states)-1})
+		subtasks = append(subtasks, Subtask{opt: opt, v: len(states) - 1})
 	}
 	return subtasks
 }
@@ -34,7 +34,7 @@ func GenerateOpts() [][]int {
 		for c2 := c1; c2 < 16; c2++ {
 			for c3 := c2; c3 < 16; c3++ {
 				for c4 := c3; c4 < 16; c4++ {
-					opt := []int {c1, c2, c3, c4}
+					opt := []int{c1, c2, c3, c4}
 					if differs(opt[0], opt[1:]) {
 						opts = append(opts, opt)
 					}

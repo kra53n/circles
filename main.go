@@ -2,8 +2,8 @@ package main
 
 import (
 	// "fmt"
-	"os"
 	rl "github.com/gen2brain/raylib-go/raylib"
+	"os"
 )
 
 const WDT = 1000
@@ -46,7 +46,7 @@ func main() {
 			processSearch(BidirectionalSearch, "двунаправленный поиск")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 4) {
-			processSearch(func (start, goal State) []State {return AStarSearch(start, goal, FirstHeuristic)}, "1 эвристика")
+			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, FirstHeuristic) }, "1 эвристика")
 		}
 
 		if animation.Animate {
