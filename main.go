@@ -14,7 +14,6 @@ func main() {
 	rl.InitWindow(WDT, HGT, "circle")
 	defer rl.CloseWindow()
 
-
 	field := NewField()
 	baseState := field.Content.GetState()
 	var animation Animation
@@ -39,6 +38,9 @@ func main() {
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 3) {
 			processSearch(BidirectionalSearch, "двунаправленный поиск")
+		}
+		if rl.IsKeyPressed(rl.KeyZero + 4) {
+			processSearch(func (start, goal State) []State {return AStarSearch(start, goal, FirstHeuristic)}, "1 эвристика")
 		}
 
 		if animation.Animate {

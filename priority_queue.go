@@ -3,13 +3,14 @@ package main
 
 import "container/heap"
 
-type Item struct {
+type PQItem struct {
 	val    State
 	f int
+	g int
 	idx int
 }
 
-type PriorityQueue []*Item
+type PriorityQueue []*PQItem
 
 func (pq PriorityQueue) Len() int { return len(pq) }
 
@@ -25,7 +26,7 @@ func (pq PriorityQueue) Swap(i, j int) {
 
 func (pq *PriorityQueue) Push(x any) {
 	n := len(*pq)
-	item := x.(*Item)
+	item := x.(*PQItem)
 	item.idx = n
 	*pq = append(*pq, item)
 }
@@ -40,7 +41,7 @@ func (pq *PriorityQueue) Pop() any {
 	return item
 }
 
-func (pq *PriorityQueue) update(item *Item, val State, f int) {
+func (pq *PriorityQueue) update(item *PQItem, val State, f int) {
 	item.val = val
 	item.f = f
 	heap.Fix(pq, item.idx)

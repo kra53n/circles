@@ -1,6 +1,7 @@
 package main
 
 // import "fmt"
+import "container/heap"
 
 type ISearch interface {
 	Search()
@@ -106,8 +107,54 @@ func BidirectionalSearch(start, goal State) []State {
 	}
 }
 
-func AStarSearch(start, goal State) []State {
+func AStarSearch(start, goal State, h func(s State) int) []State {
+	var openNodes PriorityQueue
+	var closedNodes []*PQItem
+	// add start to openNodes
+	
+	for openNodes.Len() > 0 {
+		curr := heap.Pop(&openNodes).(*PQItem)
+		if curr.val.Equals(goal) {
+			// statistic.pathLenght = curr.g;
+			// statistic.Print();
+			return curr.val.Unwrap();
+		}
+		// statistic.Collect(openNodes, closedNodes);
+		closedNodes = append(closedNodes, curr)
+		for _, n := range curr.val.GenStates() {
+			item := openNodes.GetItem(n)
+			if item != nil {
+				score := h(n) + curr.g + 1
+				if score < item.f {
+					item.f = score
+					item.g = curr.g + 1
+					item.val.prv = curr.val
+				}
+				continue
+			}
+			item = closedNodes.GetItem(n)
+			if item != nil {
+				score := h(n) + curr.g + 1
+				if score < item.f {
+					closedNodes.Remove(item)
+					item.f = score
+					item.g = curr.g + 1
+					item.val.prv = curr.val
+					heap.Push(&openNodes, item)
+				}
+				continue
+			}
+			item.g = curr.g + 1
+			item.f = h(state) + state.g
+			item.val.prv = curr.val
+			heap.Push(&openNodes, item)
+		}
+	}
 	return nil
+}
+
+func FirstHeuristic(s State) int {
+	return 1
 }
 
 func stateInStates(s State, states []State) bool {
