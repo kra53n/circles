@@ -124,7 +124,7 @@ func AStarSearch(start, goal State, h func(s State) int) []State {
 		curr := openNodes[0]
 		openNodes = openNodes[1:]
 		if curr.val.Equals(goal) {
-			return curr.val.Unwrap();
+			return curr.val.Unwrap()
 		}
 		closedNodes = append(closedNodes, curr)
 		for _, n := range curr.GenStates() {
