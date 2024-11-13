@@ -9,18 +9,33 @@ import (
 const WDT = 1000
 const HGT = 720
 
+var storage Storage
+
 func main() {
+	filename := "subtask.txt"
+	storage = ReadSubtask(filename)
+
+	storage.get(State{})
+
+	return
+
 	if len(os.Args) > 1 && os.Args[1] == "subtask" {
-		if len(os.Args) > 2 && os.Args[2] == "write" {
-			filename := "subtask.txt"
-			err := WriteSubtask(filename, GenerateSubtask())
-			if err != nil {
-				fmt.Printf("Could not write to file due %s\n", err)
+		if len(os.Args) > 2 {
+			if os.Args[2] == "read" {
+				fmt.Println(storage)
+				return
 			}
-			fmt.Printf("Subtask was written to file %s\n", filename)
-			return
+
+			if os.Args[2] == "write" {
+				err := WriteSubtask(filename, GenerateSubtask())
+				if err != nil {
+					fmt.Printf("Could not write to file due %s\n", err)
+				}
+				fmt.Printf("Subtask was written to file %s\n", filename)
+				return
+			}
 		}
-		GenerateSubtask()
+		fmt.Println("use `read` or `write` as subcommands")
 		return
 	}
 

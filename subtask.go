@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"os"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"strings"
+	"strconv"
 )
 
 type OptionWithVal struct {
@@ -21,7 +25,6 @@ func GenerateSubtask() []OptionWithVal {
 		{0, 1, 1, 1},
 	}
 	opts := GenerateOpts()
-	opts = opts[:3] // TODO: delete
 	for _, opt := range opts {
 		start := optToState(opt)
 		var states []State
@@ -97,4 +100,32 @@ func WriteSubtask(filename string, subtasks []OptionWithVal) error {
 		fmt.Fprintf(file, "%d\n", subtask.v)
 	}
 	return nil
+}
+
+type Storage map[string]int
+
+func ReadSubtask(filename string) Storage {
+	data, _ := ioutil.ReadFile(filename)
+	content := string(data)
+	res := make(Storage)
+	for _, line := range strings.Split(content, "\n") {
+		if len(line) < 12 {
+			continue
+		}
+		v, _ := strconv.Atoi(line[12:])
+		res[line[:12]] = v
+	}
+	return res
+}
+
+func (s *Storage) get(state State) int {
+	circles := make([]int, 4, 4)
+	for i := 0; i < 16; i++ {
+		if state.Content[i/4][i%4] == 0 {
+			circles = append(circles, i)
+		}
+	}
+	var b bytes.Buffer
+	printOpt(circles, &b)
+	return (*s)[b.String()])
 }
