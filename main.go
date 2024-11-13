@@ -1,9 +1,9 @@
 package main
 
 import (
-	"os"
 	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
+	"os"
 )
 
 const WDT = 1000

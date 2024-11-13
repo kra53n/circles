@@ -2,12 +2,12 @@ package main
 
 import (
 	"bytes"
-	"os"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"strings"
+	"os"
 	"strconv"
+	"strings"
 )
 
 type OptionWithVal struct {
@@ -127,5 +127,5 @@ func (s *Storage) get(state State) int {
 	}
 	var b bytes.Buffer
 	printOpt(circles, &b)
-	return (*s)[b.String()])
+	return (*s)[b.String()]
 }
