@@ -1,9 +1,9 @@
 package main
 
 import (
-	// "fmt"
-	rl "github.com/gen2brain/raylib-go/raylib"
 	"os"
+	"fmt"
+	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 const WDT = 1000
@@ -11,7 +11,16 @@ const HGT = 720
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "subtask" {
-		GenerateSubtasks()
+		if len(os.Args) > 2 && os.Args[2] == "write" {
+			filename := "subtask.txt"
+			err := WriteSubtask(filename, GenerateSubtask())
+			if err != nil {
+				fmt.Printf("Could not write to file due %s\n", err)
+			}
+			fmt.Printf("Subtask was written to file %s\n", filename)
+			return
+		}
+		GenerateSubtask()
 		return
 	}
 

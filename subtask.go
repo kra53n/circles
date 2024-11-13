@@ -1,14 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"os"
+	"fmt"
+	"io"
+)
 
-type Subtask struct {
+type OptionWithVal struct {
 	opt []int
 	v   int
 }
 
-func GenerateSubtasks() []Subtask {
-	subtasks := make([]Subtask, 0, 1820)
+func GenerateSubtask() []OptionWithVal {
+	subtasks := make([]OptionWithVal, 0, 1820)
 	var goal State
 	goal.Content = [][]byte{
 		{0, 1, 1, 1},
@@ -17,13 +21,14 @@ func GenerateSubtasks() []Subtask {
 		{0, 1, 1, 1},
 	}
 	opts := GenerateOpts()
+	opts = opts[:3] // TODO: delete
 	for _, opt := range opts {
 		start := optToState(opt)
 		var states []State
 		if !start.Equals(goal) {
 			states = BidirectionalSearch(start, goal)
 		}
-		subtasks = append(subtasks, Subtask{opt: opt, v: len(states) - 1})
+		subtasks = append(subtasks, OptionWithVal{opt: opt, v: len(states) - 1})
 	}
 	return subtasks
 }
@@ -57,16 +62,6 @@ func differs(elem int, elems []int) bool {
 	return differs(elems[0], elems[1:])
 }
 
-func printOpt(opt []int) {
-	for _, v := range opt {
-		fmt.Print(v)
-		if v <= 9 {
-			fmt.Print(" ")
-		}
-		fmt.Print(" ")
-	}
-}
-
 func optToState(opt []int) State {
 	var content Content = make([][]byte, 0, 4)
 	for i := 0; i < 4; i += 1 {
@@ -79,4 +74,27 @@ func optToState(opt []int) State {
 		content[v/4][v%4] = 0
 	}
 	return State{Content: content}
+}
+
+func printOpt(opt []int, w io.Writer) {
+	for _, v := range opt {
+		fmt.Fprintf(w, "%d", v)
+		if v <= 9 {
+			fmt.Fprintf(w, " ")
+		}
+		fmt.Fprintf(w, " ")
+	}
+}
+
+func WriteSubtask(filename string, subtasks []OptionWithVal) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	for _, subtask := range subtasks {
+		printOpt(subtask.opt, file)
+		fmt.Fprintf(file, "%d\n", subtask.v)
+	}
+	return nil
 }
