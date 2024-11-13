@@ -15,10 +15,6 @@ func main() {
 	filename := "subtask.txt"
 	storage = ReadSubtask(filename)
 
-	storage.get(State{})
-
-	return
-
 	if len(os.Args) > 1 && os.Args[1] == "subtask" {
 		if len(os.Args) > 2 {
 			if os.Args[2] == "read" {
@@ -71,6 +67,9 @@ func main() {
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 4) {
 			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, FirstHeuristic) }, "1 эвристика")
+		}
+		if rl.IsKeyPressed(rl.KeyZero + 5) {
+			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SubtaskHeuristic) }, "эвристика на основе подзадач")
 		}
 
 		if animation.Animate {

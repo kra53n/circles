@@ -75,7 +75,7 @@ func BidirectionalSearch(start, goal State) []State {
 				nodeReversePtr := getStateInStates(n, openNodesR)
 				if nodeReversePtr != nil {
 					states := UnwrapBidirectionalStates(n, *nodeReversePtr)
-					// statistic.Print(len(states))
+					statistic.Print(len(states))
 					return states
 				}
 				if !stateInStates(n, openNodes) && !stateInStates(n, closedNodes) {
@@ -94,7 +94,7 @@ func BidirectionalSearch(start, goal State) []State {
 				nodePtr := getStateInStates(n, openNodes)
 				if nodePtr != nil {
 					states := UnwrapBidirectionalStates(*nodePtr, n)
-					// statistic.Print(len(states))
+					statistic.Print(len(states))
 					return states
 				}
 				if !stateInStates(n, openNodesR) && !stateInStates(n, closedNodesR) {
@@ -115,6 +115,8 @@ type PQItem struct {
 type PQItemSlice []PQItem
 
 func AStarSearch(start, goal State, h func(s State) int) []State {
+	var statistic Statistic
+
 	var openNodes PQItemSlice
 	var closedNodes PQItemSlice
 
@@ -123,7 +125,9 @@ func AStarSearch(start, goal State, h func(s State) int) []State {
 	for len(openNodes) > 0 {
 		curr := openNodes[0]
 		openNodes = openNodes[1:]
+		statistic.CollectHeuristic(openNodes, closedNodes)
 		if curr.val.Equals(goal) {
+			statistic.Print("Эвристика на основе подзадач")
 			return curr.val.Unwrap()
 		}
 		closedNodes = append(closedNodes, curr)
@@ -208,6 +212,10 @@ func remove(items PQItemSlice, item PQItem) PQItemSlice {
 
 func FirstHeuristic(s State) int {
 	return 1
+}
+
+func SubtaskHeuristic(s State) int {
+	return storage.get(s)
 }
 
 func stateInStates(s State, states []State) bool {

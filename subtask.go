@@ -119,7 +119,7 @@ func ReadSubtask(filename string) Storage {
 }
 
 func (s *Storage) get(state State) int {
-	circles := make([]int, 4, 4)
+	circles := make([]int, 0, 4)
 	for i := 0; i < 16; i++ {
 		if state.Content[i/4][i%4] == 0 {
 			circles = append(circles, i)

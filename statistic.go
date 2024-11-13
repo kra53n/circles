@@ -22,6 +22,15 @@ func (s *Statistic) Collect(openNodes, closeNodes []State) {
 	s.maxNodesNum = max(s.maxNodesNum, s.currOpenNodesNum+s.currClosedNodesNum)
 }
 
+func (s *Statistic) CollectHeuristic(openNodes, closeNodes PQItemSlice) {
+	s.iters += 1
+	s.currOpenNodesNum = len(openNodes)
+	s.currClosedNodesNum = len(closeNodes)
+	s.maxOpenNodesNum = max(s.maxOpenNodesNum, s.currOpenNodesNum)
+	s.maxClosedNodesNum = max(s.maxClosedNodesNum, s.currClosedNodesNum)
+	s.maxNodesNum = max(s.maxNodesNum, s.currOpenNodesNum+s.currClosedNodesNum)
+}
+
 func (s *Statistic) Print(name string) {
 	r := fmt.Sprintf("\n\tРезультат поиска в %s\n\n", name)
 	r += fmt.Sprintf("Итераций: %d\n", s.iters)
