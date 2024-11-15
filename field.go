@@ -30,12 +30,6 @@ func NewField() Field {
 			Width:  size,
 			Height: size,
 		},
-		Col: rl.Color{
-			R: 0x18,
-			G: 0x18,
-			B: 0x18,
-			A: 0xFF,
-		},
 		Size: 4,
 	}
 	f.Content = make([][]byte, f.Size)
@@ -129,7 +123,7 @@ func (c Content) moveRowReverse(idx int) {
 }
 
 func (f *Field) Draw() {
-	rl.DrawRectangleRounded(f.Bound, 0.1, 0, f.Col)
+	rl.DrawRectangleRounded(f.Bound, 0.1, 0, COL_BOX_BACKGROUND)
 	f.drawContent()
 	f.drawBtns()
 }
@@ -159,13 +153,13 @@ func (f *Field) drawBtns() {
 	y = f.Bound.Y - sz
 
 	for i := 0; i < f.Size; i++ {
-		drawArrow(x, y, sz, padding, Up, rl.White)
+		drawArrow(x, y, sz, padding, Up, COL_ARROW)
 		x += sz
 	}
 	x = f.Bound.X - sz
 	y = f.Bound.Y
 	for i := 0; i < f.Size; i++ {
-		drawArrow(x, y, sz, padding, Left, rl.White)
+		drawArrow(x, y, sz, padding, Left, COL_ARROW)
 		y += sz
 	}
 }
@@ -211,33 +205,13 @@ func drawArrow(x, y, sz, padding float32, dir Direction, col rl.Color) {
 func getColByVal(col byte) rl.Color {
 	switch col {
 	case 0:
-		return rl.Color{
-			R: 0xFF,
-			G: 0x00,
-			B: 0x00,
-			A: 0xFF,
-		}
+		return COL_CIRC1
 	case 1:
-		return rl.Color{
-			R: 0x00,
-			G: 0xFF,
-			B: 0x00,
-			A: 0xFF,
-		}
+		return COL_CIRC2
 	case 2:
-		return rl.Color{
-			R: 0x00,
-			G: 0x00,
-			B: 0xFF,
-			A: 0xFF,
-		}
+		return COL_CIRC3
 	case 3:
-		return rl.Color{
-			R: 0x80,
-			G: 0x00,
-			B: 0x80,
-			A: 0xFF,
-		}
+		return COL_CIRC4
 	}
 	return rl.Color{}
 }

@@ -8,13 +8,14 @@ import (
 
 const WDT = 1000
 const HGT = 720
-var COL_BACKGROUND = rl.Color{17, 17, 27, 255}
-var COL_ARROW = rl.Color{205, 214, 244, 255}
-var COL_CIRC1 = rl.Color{243, 139, 168, 255}
-var COL_CIRC2 = rl.Color{249, 226, 175, 255}
-var COL_CIRC3 = rl.Color{166, 227, 161, 255}
-var COL_CIRC4 = rl.Color{137, 180, 250, 255}
-// var COL_CIRC1 = rl.ColorFromHSV(12, 12, 12)
+
+var COL_BACKGROUND = rl.Color{24, 24, 37, 255}
+var COL_BOX_BACKGROUND = rl.Color{17, 17, 27, 255}
+var COL_ARROW = rl.Color{88, 91, 112, 255}
+var COL_CIRC1 = rl.Color{230, 15, 57, 255}
+var COL_CIRC2 = rl.Color{223, 142, 29, 255}
+var COL_CIRC3 = rl.Color{64, 160, 43, 255}
+var COL_CIRC4 = rl.Color{30, 102, 245, 255}
 
 var storage Storage
 
@@ -112,7 +113,7 @@ func main() {
 
 		rl.BeginDrawing()
 		{
-			rl.ClearBackground(rl.Blue)
+			rl.ClearBackground(COL_BACKGROUND)
 			field.Draw()
 		}
 		rl.EndDrawing()
@@ -126,6 +127,6 @@ func printUsage() {
 	fmt.Println("4) 1 эвристика")
 	fmt.Println("5) 2 эвристика")
 	fmt.Println("6) эвристика на основе подзадач без 2 эвристики")
-	fmt.Println("7) 2 эвристика на основе подзадач")
+	fmt.Println("7) эвристика на основе подзадач")
 	fmt.Println()
 }

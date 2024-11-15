@@ -219,9 +219,9 @@ func FirstHeuristic(start, goal State) int {
 			}
 		}
 	}
-	
+
 	value /= 4
-	if (value < 1) {
+	if value < 1 {
 		return 1
 	}
 	return int(value)
@@ -233,7 +233,7 @@ func SecondHeuristic(start, goal State) int {
 	for row := 0; row < len(start.Content); row++ {
 		for col := 0; col < len(start.Content[row]); col++ {
 			color := start.Content[row][col]
-			
+
 			if start.Content[row][col] != goal.Content[row][col] {
 				for targetRow := 0; targetRow < len(goal.Content); targetRow++ {
 					for targetCol := 0; targetCol < len(goal.Content); targetCol++ {
@@ -260,9 +260,8 @@ func SecondHeuristic(start, goal State) int {
 		}
 	}
 
-	
 	value /= 4
-	if (value < 1) {
+	if value < 1 {
 		return 1
 	}
 	return int(value)
@@ -277,7 +276,7 @@ func secondHeuristicForSubtask(start, goal State, colorToExclude byte) int {
 			if color == colorToExclude {
 				continue
 			}
-			
+
 			if start.Content[row][col] != goal.Content[row][col] {
 				for targetRow := 0; targetRow < len(goal.Content); targetRow++ {
 					for targetCol := 0; targetCol < len(goal.Content); targetCol++ {
@@ -304,9 +303,8 @@ func secondHeuristicForSubtask(start, goal State, colorToExclude byte) int {
 		}
 	}
 
-	
 	value /= 4
-	if (value < 1) {
+	if value < 1 {
 		return 1
 	}
 	return int(value)
