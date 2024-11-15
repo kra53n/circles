@@ -79,7 +79,6 @@ func BidirectionalSearch(start, goal State) []State {
 					return states
 				}
 				if !stateInStates(n, openNodes) && !stateInStates(n, closedNodes) {
-
 					newO = append(newO, n)
 				}
 			}
