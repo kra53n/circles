@@ -18,6 +18,7 @@ var COL_CIRC3 = rl.Color{64, 160, 43, 255}
 var COL_CIRC4 = rl.Color{30, 102, 245, 255}
 
 var storage Storage
+var randMoves int = 3
 
 func main() {
 	filename := "subtask.txt"
@@ -106,9 +107,37 @@ func main() {
 		}
 
 		if rl.IsKeyPressed(rl.KeyR) && animation.States[0].Content != nil {
-			field.Content = animation.States[0].Content
-			animation.Play()
+			if len(animation.States) > 0 {
+				field.Content = animation.States[0].Content
+				animation.Play()
+			}
 			animation.Stop()
+		}
+		if rl.IsKeyPressed(rl.KeyC) {
+			if len(animation.States) > 0 {
+				field.Content = animation.States[0].Content
+				animation.Play()
+			}
+			animation.Stop()
+			field.MoveRandomly(randMoves)
+		}
+
+		printRandMoves := false
+		if rl.IsKeyDown(rl.KeyLeftControl) || rl.IsKeyDown(rl.KeyRightControl) {
+			if rl.IsKeyPressed(rl.KeyMinus) {
+				randMoves -= 1
+				printRandMoves = true
+			}
+			if rl.IsKeyPressed(rl.KeyEqual) {
+				randMoves += 1
+				printRandMoves = true
+			}
+		}
+		if rl.IsKeyPressed(rl.KeyP) {
+			printRandMoves = true
+		}
+		if printRandMoves {
+			fmt.Println("Rand moves:", randMoves)
 		}
 
 		rl.BeginDrawing()

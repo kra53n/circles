@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "fmt"
+	"math/rand"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -87,6 +87,22 @@ func (f *Field) updateBtns() {
 			f.Content.moveRow(i)
 		}
 		y += sz
+	}
+}
+
+func (f *Field) MoveRandomly(num int) {
+	if num <= 0 {
+		return
+	}
+	size := len(f.Content)
+	f.Content.moveRow(rand.Int() % size)
+	num -= 1
+	for i := 0; i < num; i++ {
+		if rand.Int() % 2 == 0 {
+			f.Content.moveRow(rand.Int() % size)
+		} else {
+			f.Content.moveCol(rand.Int() % size)
+		}
 	}
 }
 
