@@ -22,8 +22,9 @@ func BreadthFirstSearch(start, goal State) []State {
 		openNodes = openNodes[1:]
 		statistic.Collect(openNodes, closedNodes)
 		if state.Equals(goal) {
-			statistic.Print("Ширину")
-			return state.Unwrap()
+			states := state.Unwrap()
+			statistic.Print("Ширину", len(states)-1)
+			return states
 		}
 		closedNodes = append(closedNodes, state)
 		for _, s := range state.GenStates() {
@@ -46,8 +47,9 @@ func DepthFirstSearch(start, goal State) []State {
 		openNodes = openNodes[:len(openNodes)-1]
 		statistic.Collect(openNodes, closedNodes)
 		if state.Equals(goal) {
-			statistic.Print("Глубину")
-			return state.Unwrap()
+			states := state.Unwrap()
+			statistic.Print("Глубину", len(states))
+			return states
 		}
 		closedNodes = append(closedNodes, state)
 		for _, s := range state.GenStates() {
@@ -126,8 +128,9 @@ func AStarSearch(start, goal State, h func(start, goal State) int) []State {
 		openNodes = openNodes[1:]
 		statistic.CollectHeuristic(openNodes, closedNodes)
 		if curr.val.Equals(goal) {
-			statistic.Print("Эвристика на основе подзадач")
-			return curr.val.Unwrap()
+			states := curr.val.Unwrap()
+			statistic.Print("Эвристика на основе подзадач", len(states))
+			return states
 		}
 		closedNodes = append(closedNodes, curr)
 		for _, n := range curr.GenStates() {

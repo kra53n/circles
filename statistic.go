@@ -31,8 +31,9 @@ func (s *Statistic) CollectHeuristic(openNodes, closeNodes PQItemSlice) {
 	s.maxNodesNum = max(s.maxNodesNum, s.currOpenNodesNum+s.currClosedNodesNum)
 }
 
-func (s *Statistic) Print(name string) {
+func (s *Statistic) Print(name string, pathLen int) {
 	r := fmt.Sprintf("\n\tРезультат поиска в %s\n\n", name)
+	r += fmt.Sprintf("Длина пути: %d\n", pathLen)
 	r += fmt.Sprintf("Итераций: %d\n", s.iters)
 	r += "Открытые узлы:\n"
 	r += fmt.Sprintf("\tКоличество при завершении: %d\n", s.currOpenNodesNum)
