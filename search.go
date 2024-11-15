@@ -114,13 +114,13 @@ type PQItem struct {
 
 type PQItemSlice []PQItem
 
-func AStarSearch(start, goal State, h func(s State) int) []State {
+func AStarSearch(start, goal State, h func(start, goal State) int) []State {
 	var statistic Statistic
 
 	var openNodes PQItemSlice
 	var closedNodes PQItemSlice
 
-	openNodes = add(openNodes, PQItem{val: start, f: h(start)})
+	openNodes = add(openNodes, PQItem{val: start, f: h(start, goal)})
 
 	for len(openNodes) > 0 {
 		curr := openNodes[0]
@@ -134,7 +134,7 @@ func AStarSearch(start, goal State, h func(s State) int) []State {
 		for _, n := range curr.GenStates() {
 			item := get(openNodes, n)
 			if item != nil {
-				score := h(n.val) + curr.g + 1
+				score := h(n.val, goal) + curr.g + 1
 				if score < item.f {
 					item.f = score
 					item.g = curr.g + 1
@@ -144,7 +144,7 @@ func AStarSearch(start, goal State, h func(s State) int) []State {
 			}
 			item = get(closedNodes, n)
 			if item != nil {
-				score := h(n.val) + curr.g + 1
+				score := h(n.val, goal) + curr.g + 1
 				if score < item.f {
 					closedNodes = remove(closedNodes, *item)
 					item.f = score
@@ -155,7 +155,7 @@ func AStarSearch(start, goal State, h func(s State) int) []State {
 				continue
 			}
 			n.g = curr.g + 1
-			n.f = h(n.val) + n.g
+			n.f = h(n.val, goal) + n.g
 			n.val.prv = &curr.val
 			openNodes = add(openNodes, n)
 		}
@@ -210,12 +210,114 @@ func remove(items PQItemSlice, item PQItem) PQItemSlice {
 	return items
 }
 
-func FirstHeuristic(s State) int {
-	return 1
+func FirstHeuristic(start, goal State) int {
+	var value float32
+	for row := 0; row < len(start.Content); row++ {
+		for col := 0; col < len(start.Content[row]); col++ {
+			if start.Content[row][col] != goal.Content[row][col] {
+				value += 1
+			}
+		}
+	}
+	
+	value /= 4
+	if (value < 1) {
+		return 1
+	}
+	return int(value)
 }
 
-func SubtaskHeuristic(s State) int {
-	return storage.get(s)
+func SecondHeuristic(start, goal State) int {
+	var value float32
+
+	for row := 0; row < len(start.Content); row++ {
+		for col := 0; col < len(start.Content[row]); col++ {
+			color := start.Content[row][col]
+			
+			if start.Content[row][col] != goal.Content[row][col] {
+				for targetRow := 0; targetRow < len(goal.Content); targetRow++ {
+					for targetCol := 0; targetCol < len(goal.Content); targetCol++ {
+						if color == goal.Content[targetRow][targetCol] {
+							diff1 := row - targetRow
+							diff2 := col - targetCol
+							if diff1 < 0 {
+								diff1 *= -1
+							}
+							if diff2 < 0 {
+								diff2 *= -1
+							}
+							distance := diff1 + diff2
+							if distance <= 2 {
+								value += float32(distance)
+							} else {
+								value += 1
+							}
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+
+	
+	value /= 4
+	if (value < 1) {
+		return 1
+	}
+	return int(value)
+}
+
+func secondHeuristicForSubtask(start, goal State, colorToExclude byte) int {
+	var value float32
+
+	for row := 0; row < len(start.Content); row++ {
+		for col := 0; col < len(start.Content[row]); col++ {
+			color := start.Content[row][col]
+			if color == colorToExclude {
+				continue
+			}
+			
+			if start.Content[row][col] != goal.Content[row][col] {
+				for targetRow := 0; targetRow < len(goal.Content); targetRow++ {
+					for targetCol := 0; targetCol < len(goal.Content); targetCol++ {
+						if color == goal.Content[targetRow][targetCol] {
+							diff1 := row - targetRow
+							diff2 := col - targetCol
+							if diff1 < 0 {
+								diff1 *= -1
+							}
+							if diff2 < 0 {
+								diff2 *= -1
+							}
+							distance := diff1 + diff2
+							if distance <= 2 {
+								value += float32(distance)
+							} else {
+								value += 1
+							}
+							break
+						}
+					}
+				}
+			}
+		}
+	}
+
+	
+	value /= 4
+	if (value < 1) {
+		return 1
+	}
+	return int(value)
+}
+
+func SubtaskHeuristicWithoutSecond(start, goal State) int {
+	return storage.get(start)
+}
+
+func SubtaskHeuristic(start, goal State) int {
+	return secondHeuristicForSubtask(start, goal, 0) + storage.get(start)
 }
 
 func stateInStates(s State, states []State) bool {

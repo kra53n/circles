@@ -8,6 +8,13 @@ import (
 
 const WDT = 1000
 const HGT = 720
+var COL_BACKGROUND = rl.Color{17, 17, 27, 255}
+var COL_ARROW = rl.Color{205, 214, 244, 255}
+var COL_CIRC1 = rl.Color{243, 139, 168, 255}
+var COL_CIRC2 = rl.Color{249, 226, 175, 255}
+var COL_CIRC3 = rl.Color{166, 227, 161, 255}
+var COL_CIRC4 = rl.Color{137, 180, 250, 255}
+// var COL_CIRC1 = rl.ColorFromHSV(12, 12, 12)
 
 var storage Storage
 
@@ -34,6 +41,8 @@ func main() {
 		fmt.Println("use `read` or `write` as subcommands")
 		return
 	}
+
+	printUsage()
 
 	rl.SetTraceLogLevel(rl.LogNone)
 	rl.SetTargetFPS(60)
@@ -69,6 +78,12 @@ func main() {
 			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, FirstHeuristic) }, "1 эвристика")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 5) {
+			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SecondHeuristic) }, "2 эвристика")
+		}
+		if rl.IsKeyPressed(rl.KeyZero + 6) {
+			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SubtaskHeuristicWithoutSecond) }, "эвристика на основе подзадач без 2 эвристики")
+		}
+		if rl.IsKeyPressed(rl.KeyZero + 7) {
 			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SubtaskHeuristic) }, "эвристика на основе подзадач")
 		}
 
@@ -102,4 +117,15 @@ func main() {
 		}
 		rl.EndDrawing()
 	}
+}
+
+func printUsage() {
+	fmt.Println("1) поиск в ширину")
+	fmt.Println("2) поиск в глубину")
+	fmt.Println("3) двунаправленный поиск")
+	fmt.Println("4) 1 эвристика")
+	fmt.Println("5) 2 эвристика")
+	fmt.Println("6) эвристика на основе подзадач без 2 эвристики")
+	fmt.Println("7) 2 эвристика на основе подзадач")
+	fmt.Println()
 }
