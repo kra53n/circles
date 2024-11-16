@@ -4,6 +4,7 @@ import (
 	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"os"
+	"strconv"
 )
 
 const WDT = 1000
@@ -17,31 +18,31 @@ var COL_CIRC2 = rl.Color{223, 142, 29, 255}
 var COL_CIRC3 = rl.Color{64, 160, 43, 255}
 var COL_CIRC4 = rl.Color{30, 102, 245, 255}
 
-var storage Storage
+var storages []Storage = make([]Storage, 4)
 var randMoves int = 3
 
 func main() {
-	filename := "subtask.txt"
-	storage = ReadSubtask(filename)
+	filename := "subtask"
 
 	if len(os.Args) > 1 && os.Args[1] == "subtask" {
 		if len(os.Args) > 2 {
-			if os.Args[2] == "read" {
-				fmt.Println(storage)
-				return
-			}
-
 			if os.Args[2] == "write" {
-				err := WriteSubtask(filename, GenerateSubtask())
-				if err != nil {
-					fmt.Printf("Could not write to file due %s\n", err)
+				for color := 0; color < 4; color++ {
+					filename := filename + strconv.Itoa(color) + ".txt"
+					fmt.Println("Subtask has started to generate for color", color)
+					err := WriteSubtask(filename, GenerateSubtask(color))
+					if err != nil {
+						fmt.Printf("Could not write to file due %s\n", err)
+					}
+					fmt.Printf("Subtask was written to file %s\n\n", filename)
 				}
-				fmt.Printf("Subtask was written to file %s\n", filename)
 				return
 			}
 		}
-		fmt.Println("use `read` or `write` as subcommands")
 		return
+	}
+	for color := 0; color < 4; color++ {
+		storages[color] = ReadSubtask(filename + strconv.Itoa(color) + ".txt")
 	}
 
 	printUsage()
@@ -87,6 +88,9 @@ func main() {
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 7) {
 			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SubtaskHeuristic) }, "эвристика на основе подзадач")
+		}
+		if rl.IsKeyPressed(rl.KeyZero + 8) {
+			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SubtaskMaxHeuristic) }, "эвристика на основе подзадач с выбором максимального значения")
 		}
 
 		if animation.Animate {
@@ -157,5 +161,6 @@ func printUsage() {
 	fmt.Println("5) 2 эвристика")
 	fmt.Println("6) эвристика на основе подзадач без 2 эвристики")
 	fmt.Println("7) эвристика на основе подзадач")
+	fmt.Println("8) эвристика на основе подзадач с выбором максимального значения")
 	fmt.Println()
 }

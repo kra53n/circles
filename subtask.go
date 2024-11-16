@@ -15,8 +15,9 @@ type OptionWithVal struct {
 	v   int
 }
 
-func GenerateSubtask() []OptionWithVal {
+func GenerateSubtask(col int) []OptionWithVal {
 	subtasks := make([]OptionWithVal, 0, 1820)
+
 	var goal State
 	goal.Content = [][]byte{
 		{0, 1, 1, 1},
@@ -24,6 +25,15 @@ func GenerateSubtask() []OptionWithVal {
 		{0, 1, 1, 1},
 		{0, 1, 1, 1},
 	}
+	for i := 0; i < len(goal.Content); i++ {
+		for j := 0; j < len(goal.Content[i]); j++ {
+			goal.Content[i][j] = 1
+			if j == col {
+				goal.Content[i][j] = 0
+			}
+		}
+	}
+
 	opts := GenerateOpts()
 	for _, opt := range opts {
 		start := optToState(opt)
