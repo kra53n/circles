@@ -5,7 +5,7 @@ import (
 )
 
 type Statistic struct {
-	iters              int
+	iters              Iters
 	currOpenNodesNum   int
 	currClosedNodesNum int
 	maxOpenNodesNum    int
@@ -46,7 +46,7 @@ func (s *Statistic) Print(name string, pathLen int) {
 }
 
 type BidirectionalStatistic struct {
-	iters               int
+	iters               Iters
 	currOpenNodesNum    int
 	currClosedNodesNum  int
 	maxOpenNodesNum     int

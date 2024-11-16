@@ -24,12 +24,17 @@ var randMoves int = 3
 func main() {
 	filename := "subtask"
 
-	if len(os.Args) > 1 && os.Args[1] == "subtask" {
-		if len(os.Args) > 2 {
-			if os.Args[2] == "write" {
+	for color := 0; color < 4; color++ {
+		storages[color] = ReadSubtask(filename + strconv.Itoa(color) + ".txt")
+	}
+
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "subtask":
+			if len(os.Args) > 2 && os.Args[2] == "write" {
 				for color := 0; color < 4; color++ {
 					filename := filename + strconv.Itoa(color) + ".txt"
-					fmt.Println("Subtask has started to generate for color", color)
+					fmt.Println("Subtask with color", color, "has started to generate")
 					err := WriteSubtask(filename, GenerateSubtask(color))
 					if err != nil {
 						fmt.Printf("Could not write to file due %s\n", err)
@@ -38,11 +43,11 @@ func main() {
 				}
 				return
 			}
+			return
+		case "measure":
+			Measure()
+			return
 		}
-		return
-	}
-	for color := 0; color < 4; color++ {
-		storages[color] = ReadSubtask(filename + strconv.Itoa(color) + ".txt")
 	}
 
 	printUsage()
@@ -56,9 +61,9 @@ func main() {
 	baseState := field.Content.GetState()
 	var animation Animation
 
-	processSearch := func(searchMethod func(start, goal State) []State, name string) {
+	processSearch := func(searchMethod func(start, goal State) ([]State, Iters), name string) {
 		rl.SetWindowTitle("Запущен " + name)
-		states := searchMethod(field.Content.GetState(), baseState)
+		states, _ := searchMethod(field.Content.GetState(), baseState)
 		animation.Load(states)
 		animation.Play()
 		rl.SetWindowTitle("Завершён " + name)
@@ -78,19 +83,21 @@ func main() {
 			processSearch(BidirectionalSearch, "двунаправленный поиск")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 4) {
-			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, FirstHeuristic) }, "1 эвристика")
+			processSearch(func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, FirstHeuristic) }, "1 эвристика")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 5) {
-			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SecondHeuristic) }, "2 эвристика")
+			processSearch(func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, SecondHeuristic) }, "2 эвристика")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 6) {
-			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SubtaskHeuristicWithoutSecond) }, "эвристика на основе подзадач без 2 эвристики")
+			processSearch(func(start, goal State) ([]State, Iters) {
+				return AStarSearch(start, goal, SubtaskHeuristicWithoutSecond)
+			}, "эвристика на основе подзадач без 2 эвристики")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 7) {
-			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SubtaskHeuristic) }, "эвристика на основе подзадач")
+			processSearch(func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, SubtaskHeuristic) }, "эвристика на основе подзадач")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 8) {
-			processSearch(func(start, goal State) []State { return AStarSearch(start, goal, SubtaskMaxHeuristic) }, "эвристика на основе подзадач с выбором максимального значения")
+			processSearch(func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, SubtaskMaxHeuristic) }, "эвристика на основе подзадач с выбором максимального значения")
 		}
 
 		if animation.Animate {
@@ -123,7 +130,7 @@ func main() {
 				animation.Play()
 			}
 			animation.Stop()
-			field.MoveRandomly(randMoves)
+			field.Content.MoveRandomly(randMoves)
 		}
 
 		printRandMoves := false

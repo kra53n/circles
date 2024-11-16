@@ -39,7 +39,7 @@ func GenerateSubtask(col int) []OptionWithVal {
 		start := optToState(opt)
 		var states []State
 		if !start.Equals(goal) {
-			states = BidirectionalSearch(start, goal)
+			states, _ = BidirectionalSearch(start, goal)
 		}
 		subtasks = append(subtasks, OptionWithVal{opt: opt, v: len(states)})
 	}

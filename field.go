@@ -90,18 +90,18 @@ func (f *Field) updateBtns() {
 	}
 }
 
-func (f *Field) MoveRandomly(num int) {
+func (c *Content) MoveRandomly(num int) {
 	if num <= 0 {
 		return
 	}
-	size := len(f.Content)
-	f.Content.moveRow(rand.Int() % size)
+	size := len(*c)
+	c.moveRow(rand.Int() % size)
 	num -= 1
 	for i := 0; i < num; i++ {
 		if rand.Int()%2 == 0 {
-			f.Content.moveRow(rand.Int() % size)
+			c.moveRow(rand.Int() % size)
 		} else {
-			f.Content.moveCol(rand.Int() % size)
+			c.moveCol(rand.Int() % size)
 		}
 	}
 }
