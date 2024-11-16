@@ -110,7 +110,7 @@ func main() {
 			}
 		}
 
-		if rl.IsKeyPressed(rl.KeyR) && animation.States[0].Content != nil {
+		if rl.IsKeyPressed(rl.KeyR) && animation.States != nil {
 			if len(animation.States) > 0 {
 				field.Content = animation.States[0].Content
 				animation.Play()

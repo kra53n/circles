@@ -77,7 +77,7 @@ func BidirectionalSearch(start, goal State) []State {
 				nodeReversePtr := getStateInStates(n, openNodesR)
 				if nodeReversePtr != nil {
 					states := UnwrapBidirectionalStates(n, *nodeReversePtr)
-					// statistic.Print(len(states))
+					statistic.Print(len(states))
 					return states
 				}
 				if !stateInStates(n, openNodes) && !stateInStates(n, closedNodes) {
@@ -95,7 +95,7 @@ func BidirectionalSearch(start, goal State) []State {
 				nodePtr := getStateInStates(n, openNodes)
 				if nodePtr != nil {
 					states := UnwrapBidirectionalStates(*nodePtr, n)
-					// statistic.Print(len(states))
+					statistic.Print(len(states))
 					return states
 				}
 				if !stateInStates(n, openNodesR) && !stateInStates(n, closedNodesR) {
@@ -313,17 +313,19 @@ func secondHeuristicForSubtask(start, goal State, colorToExclude byte) int {
 }
 
 func SubtaskHeuristicWithoutSecond(start, goal State) int {
-	return storages[0].get(start)
+	color := byte(0)
+	return storages[color].get(start, color)
 }
 
 func SubtaskHeuristic(start, goal State) int {
-	return secondHeuristicForSubtask(start, goal, 0) / 2 + storages[0].get(start)
+	color := byte(0)
+	return secondHeuristicForSubtask(start, goal, 0)/2 + storages[color].get(start, color)
 }
 
 func SubtaskMaxHeuristic(start, goal State) int {
 	var val int
-	for color := 0; i < 4; color++ {
-		val = max(val, storages[color].get(start))
+	for color := 0; color < 4; color++ {
+		val = max(val, storages[color].get(start, byte(color)))
 	}
 	return val
 }

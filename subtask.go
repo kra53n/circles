@@ -128,10 +128,10 @@ func ReadSubtask(filename string) Storage {
 	return res
 }
 
-func (s *Storage) get(state State) int {
+func (s *Storage) get(state State, color byte) int {
 	circles := make([]int, 0, 4)
 	for i := 0; i < 16; i++ {
-		if state.Content[i/4][i%4] == 0 {
+		if state.Content[i/4][i%4] == color {
 			circles = append(circles, i)
 		}
 	}

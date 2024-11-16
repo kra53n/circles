@@ -1,8 +1,8 @@
 package main
 
 import (
-	"math/rand"
 	rl "github.com/gen2brain/raylib-go/raylib"
+	"math/rand"
 )
 
 type Direction int
@@ -98,7 +98,7 @@ func (f *Field) MoveRandomly(num int) {
 	f.Content.moveRow(rand.Int() % size)
 	num -= 1
 	for i := 0; i < num; i++ {
-		if rand.Int() % 2 == 0 {
+		if rand.Int()%2 == 0 {
 			f.Content.moveRow(rand.Int() % size)
 		} else {
 			f.Content.moveCol(rand.Int() % size)
