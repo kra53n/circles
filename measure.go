@@ -6,23 +6,24 @@ import (
 	"strconv"
 )
 
-const MEASURES_DIR = "measures/"
+// const MEASURES_DIR = "measures/"
+const MEASURES_DIR = "measures_test/"
 
 func Measure() {
 	statesNum := 100
 
 	type Case struct {
 		name   string
-		method func(start, goal State) ([]State, Iters)
+		method func(start, goal State) ([]State, Statistic)
 	}
 
 	cases := []Case{
 		Case{"bidirectional", BidirectionalSearch},
-		Case{"manhatten", func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, SecondHeuristic) }},
-		Case{"subtask_1col", func(start, goal State) ([]State, Iters) {
+		Case{"manhatten", func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SecondHeuristic) }},
+		Case{"subtask_1col", func(start, goal State) ([]State, Statistic) {
 			return AStarSearch(start, goal, SubtaskHeuristicWithoutSecond)
 		}},
-		Case{"subtask", func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, SubtaskMaxHeuristic) }},
+		Case{"subtask", func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SubtaskMaxHeuristic) }},
 	}
 
 	field := NewField()
@@ -32,7 +33,7 @@ func Measure() {
 		states := make([]State, 0, statesNum)
 		for i := 0; i < statesNum; i++ {
 			state := goal.GetCopy()
-			state.Content.MoveRandomly(randMoves)
+			state.Content.MoveRandomlyReversed(randMoves)
 			states = append(states, state)
 		}
 
@@ -42,24 +43,38 @@ func Measure() {
 	}
 }
 
-func writeMeasureToFile(filename string, measures []Iters, statesNum int, randMoves int) {
+func writeMeasureToFile(filename string, measures []Statistic, statesNum int, randMoves int) {
 	file, _ := os.Create(MEASURES_DIR + filename + "_" + strconv.Itoa(randMoves) + "_" + strconv.Itoa(statesNum) + ".txt")
 	defer file.Close()
-	for _, iters := range measures {
-		fmt.Fprintf(file, "%d ", iters)
+
+	fmt.Fprintf(file, "iters ")
+	for _, stat := range measures {
+		fmt.Fprintf(file, "%d ", stat.iters)
+	}
+	fmt.Fprintf(file, "\n")
+
+	fmt.Fprintf(file, "maxOpenNodesNum ")
+	for _, stat := range measures {
+		fmt.Fprintf(file, "%d ", stat.maxOpenNodesNum)
+	}
+	fmt.Fprintf(file, "\n")
+
+	fmt.Fprintf(file, "maxClosedNodesNum ")
+	for _, stat := range measures {
+		fmt.Fprintf(file, "%d ", stat.maxClosedNodesNum)
 	}
 	fmt.Fprintf(file, "\n")
 }
 
 func measure(
-	method func(start, goal State) ([]State, Iters),
+	method func(start, goal State) ([]State, Statistic),
 	states []State,
 	goal State,
-) []Iters {
-	measure := make([]Iters, 0, len(states))
+) []Statistic {
+	measure := make([]Statistic, 0, len(states))
 	for _, state := range states {
-		_, iters := method(state, goal)
-		measure = append(measure, iters)
+		_, statistic := method(state, goal)
+		measure = append(measure, statistic)
 	}
 	return measure
 }

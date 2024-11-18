@@ -11,9 +11,7 @@ type Search struct {
 	goalState State
 }
 
-type Iters int
-
-func BreadthFirstSearch(start, goal State) ([]State, Iters) {
+func BreadthFirstSearch(start, goal State) ([]State, Statistic) {
 	var statistic Statistic
 
 	var openNodes, closedNodes []State
@@ -26,7 +24,7 @@ func BreadthFirstSearch(start, goal State) ([]State, Iters) {
 		if state.Equals(goal) {
 			states := state.Unwrap()
 			statistic.Print("Ширину", len(states))
-			return states, statistic.iters
+			return states, statistic
 		}
 		closedNodes = append(closedNodes, state)
 		for _, s := range state.GenStates() {
@@ -35,10 +33,10 @@ func BreadthFirstSearch(start, goal State) ([]State, Iters) {
 			}
 		}
 	}
-	return nil, 0
+	return nil, Statistic{}
 }
 
-func DepthFirstSearch(start, goal State) ([]State, Iters) {
+func DepthFirstSearch(start, goal State) ([]State, Statistic) {
 	var statistic Statistic
 
 	var openNodes, closedNodes []State
@@ -51,7 +49,7 @@ func DepthFirstSearch(start, goal State) ([]State, Iters) {
 		if state.Equals(goal) {
 			states := state.Unwrap()
 			statistic.Print("Глубину", len(states))
-			return states, statistic.iters
+			return states, statistic
 		}
 		closedNodes = append(closedNodes, state)
 		for _, s := range state.GenStates() {
@@ -60,10 +58,10 @@ func DepthFirstSearch(start, goal State) ([]State, Iters) {
 			}
 		}
 	}
-	return nil, 0
+	return nil, Statistic{}
 }
 
-func BidirectionalSearch(start, goal State) ([]State, Iters) {
+func BidirectionalSearch(start, goal State) ([]State, Statistic) {
 	var statistic BidirectionalStatistic
 
 	var openNodes, closedNodes, openNodesR, closedNodesR, newO []State
@@ -80,7 +78,7 @@ func BidirectionalSearch(start, goal State) ([]State, Iters) {
 				if nodeReversePtr != nil {
 					states := UnwrapBidirectionalStates(n, *nodeReversePtr)
 					statistic.Print(len(states))
-					return states, statistic.iters
+					return states, statistic.GetStatistic()
 				}
 				if !stateInStates(n, openNodes) && !stateInStates(n, closedNodes) {
 					newO = append(newO, n)
@@ -98,7 +96,7 @@ func BidirectionalSearch(start, goal State) ([]State, Iters) {
 				if nodePtr != nil {
 					states := UnwrapBidirectionalStates(*nodePtr, n)
 					statistic.Print(len(states))
-					return states, statistic.iters
+					return states, statistic.GetStatistic()
 				}
 				if !stateInStates(n, openNodesR) && !stateInStates(n, closedNodesR) {
 					newO = append(newO, n)
@@ -117,7 +115,7 @@ type PQItem struct {
 
 type PQItemSlice []PQItem
 
-func AStarSearch(start, goal State, h func(start, goal State) int) ([]State, Iters) {
+func AStarSearch(start, goal State, h func(start, goal State) int) ([]State, Statistic) {
 	var statistic Statistic
 
 	var openNodes PQItemSlice
@@ -131,8 +129,8 @@ func AStarSearch(start, goal State, h func(start, goal State) int) ([]State, Ite
 		statistic.CollectHeuristic(openNodes, closedNodes)
 		if curr.val.Equals(goal) {
 			states := curr.val.Unwrap()
-			statistic.Print("Эвристика", len(states))
-			return states, statistic.iters
+			statistic.Print("использованием эвристики", len(states))
+			return states, statistic
 		}
 		closedNodes = append(closedNodes, curr)
 		for _, n := range curr.GenStates() {
@@ -164,7 +162,7 @@ func AStarSearch(start, goal State, h func(start, goal State) int) ([]State, Ite
 			openNodes = add(openNodes, n)
 		}
 	}
-	return nil, 0
+	return nil, Statistic{}
 }
 
 func (item *PQItem) GenStates() []PQItem {

@@ -61,7 +61,7 @@ func main() {
 	baseState := field.Content.GetState()
 	var animation Animation
 
-	processSearch := func(searchMethod func(start, goal State) ([]State, Iters), name string) {
+	processSearch := func(searchMethod func(start, goal State) ([]State, Statistic), name string) {
 		rl.SetWindowTitle("Запущен " + name)
 		states, _ := searchMethod(field.Content.GetState(), baseState)
 		animation.Load(states)
@@ -83,21 +83,21 @@ func main() {
 			processSearch(BidirectionalSearch, "двунаправленный поиск")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 4) {
-			processSearch(func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, FirstHeuristic) }, "1 эвристика")
+			processSearch(func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, FirstHeuristic) }, "1 эвристика")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 5) {
-			processSearch(func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, SecondHeuristic) }, "2 эвристика")
+			processSearch(func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SecondHeuristic) }, "2 эвристика")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 6) {
-			processSearch(func(start, goal State) ([]State, Iters) {
+			processSearch(func(start, goal State) ([]State, Statistic) {
 				return AStarSearch(start, goal, SubtaskHeuristicWithoutSecond)
 			}, "эвристика на основе подзадач без 2 эвристики")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 7) {
-			processSearch(func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, SubtaskHeuristic) }, "эвристика на основе подзадач")
+			processSearch(func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SubtaskHeuristic) }, "эвристика на основе подзадач")
 		}
 		if rl.IsKeyPressed(rl.KeyZero + 8) {
-			processSearch(func(start, goal State) ([]State, Iters) { return AStarSearch(start, goal, SubtaskMaxHeuristic) }, "эвристика на основе подзадач с выбором максимального значения")
+			processSearch(func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SubtaskMaxHeuristic) }, "эвристика на основе подзадач с выбором максимального значения")
 		}
 
 		if animation.Animate {

@@ -106,6 +106,22 @@ func (c *Content) MoveRandomly(num int) {
 	}
 }
 
+func (c *Content) MoveRandomlyReversed(num int) {
+	if num <= 0 {
+		return
+	}
+	size := len(*c)
+	c.moveRowReverse(rand.Int() % size)
+	num -= 1
+	for i := 0; i < num; i++ {
+		if rand.Int()%2 == 0 {
+			c.moveRowReverse(rand.Int() % size)
+		} else {
+			c.moveColReverse(rand.Int() % size)
+		}
+	}
+}
+
 func (c Content) moveCol(idx int) {
 	fst := c[0][idx]
 	for i := 0; i < len(c)-1; i++ {
