@@ -18,18 +18,18 @@ func Measure() {
 	}
 
 	cases := []Case{
-		Case{"bidirectional", BidirectionalSearch},
-		Case{"manhatten", func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SecondHeuristic) }},
-		Case{"subtask_1col", func(start, goal State) ([]State, Statistic) {
+		{"bidirectional", BidirectionalSearch},
+		{"manhatten", func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SecondHeuristic) }},
+		{"subtask_1col", func(start, goal State) ([]State, Statistic) {
 			return AStarSearch(start, goal, SubtaskHeuristicWithoutSecond)
 		}},
-		Case{"subtask", func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SubtaskMaxHeuristic) }},
+		{"subtask", func(start, goal State) ([]State, Statistic) { return AStarSearch(start, goal, SubtaskMaxHeuristic) }},
 	}
 
 	field := NewField()
 	goal := field.Content.GetState()
 
-	for randMoves := 1; randMoves <= 5; randMoves++ {
+	for randMoves := 1; randMoves <= 10; randMoves++ {
 		states := make([]State, 0, statesNum)
 		for i := 0; i < statesNum; i++ {
 			state := goal.GetCopy()
@@ -38,7 +38,7 @@ func Measure() {
 		}
 
 		for _, c := range cases {
-			writeMeasureToFile(c.name, measure(c.method, states, goal), statesNum, randMoves)
+			go writeMeasureToFile(c.name, measure(c.method, states, goal), statesNum, randMoves)
 		}
 	}
 }

@@ -32,7 +32,7 @@ func (s *Statistic) CollectHeuristic(openNodes, closeNodes PQItemSlice) {
 }
 
 func (s *Statistic) Print(name string, pathLen int) {
-	r := fmt.Sprintf("\n\tРезультат поиска в %s\n\n", name)
+	r := fmt.Sprintf("\n\tРезультат поиска %s\n\n", name)
 	r += fmt.Sprintf("Длина пути: %d\n", pathLen)
 	r += fmt.Sprintf("Итераций: %d\n", s.iters)
 	r += "Открытые узлы:\n"
