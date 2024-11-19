@@ -6,8 +6,7 @@ import (
 	"strconv"
 )
 
-// const MEASURES_DIR = "measures/"
-const MEASURES_DIR = "measures_test/"
+const MEASURES_DIR = "measures/"
 
 func Measure() {
 	statesNum := 100

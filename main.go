@@ -31,17 +31,14 @@ func main() {
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "subtask":
-			if len(os.Args) > 2 && os.Args[2] == "write" {
-				for color := 0; color < 4; color++ {
-					filename := filename + strconv.Itoa(color) + ".txt"
-					fmt.Println("Subtask with color", color, "has started to generate")
-					err := WriteSubtask(filename, GenerateSubtask(color))
-					if err != nil {
-						fmt.Printf("Could not write to file due %s\n", err)
-					}
-					fmt.Printf("Subtask was written to file %s\n\n", filename)
+			for color := 0; color < 4; color++ {
+				filename := filename + strconv.Itoa(color) + ".txt"
+				fmt.Println("Subtask with color", color, "has started to generate")
+				err := WriteSubtask(filename, GenerateSubtask(color))
+				if err != nil {
+					fmt.Printf("Could not write to file due %s\n", err)
 				}
-				return
+				fmt.Printf("Subtask was written to file %s\n\n", filename)
 			}
 			return
 		case "measure":
