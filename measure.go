@@ -38,7 +38,10 @@ func Measure() {
 		}
 
 		for _, c := range cases {
-			go writeMeasureToFile(c.name, measure(c.method, states, goal), statesNum, randMoves)
+			go func (c Case) {
+				measureRes := measure(c.method, states, goal)
+				writeMeasureToFile(c.name, measureRes, statesNum, randMoves)
+			}(c)
 		}
 	}
 }
