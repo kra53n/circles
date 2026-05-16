@@ -1,6 +1,8 @@
-# Circles — AI Search Algorithm Visualizer
+# Circles - AI Search Algorithm Visualizer
 
 An interactive visualizer for classic and heuristic search algorithms, built in Go using [raylib-go](https://github.com/gen2brain/raylib-go). The puzzle consists of a 4×4 grid of colored circles (4 colors), and the goal is to find the shortest sequence of moves that transforms the current state into the goal state.
+
+![Circles demonstation](demo.gif)
 
 ## Puzzle Rules
 
